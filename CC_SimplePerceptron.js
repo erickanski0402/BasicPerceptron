@@ -1,6 +1,7 @@
 let p;
 let points = [];
 let inputs = [-1, 0.5];
+let trainingIndex = 0;
 
 function setup(){
   createCanvas(600, 600)
@@ -36,12 +37,27 @@ function draw(){
     noStroke();
     ellipse(element.x, element.y, 16, 16);
   });
+
+  let training = points[trainingIndex];
+  let inputs = [training.x, training.y];
+  let target = training.label;
+  p.train(inputs, target);
+  trainingIndex++;
+
+  //How can I properly display the 'line' separating positive/negative examples?
+  // stroke(0);
+  line(0, (p.weights[0] * 0 + p.weights[1]), width, (p.weights[0] + p.weights[1] * height))
+  // console.log(p.weights[0] + "  " + p.weights[1]);
+
+  if(trainingIndex == points.length){
+    trainingIndex = 0;
+  }
 }
 
 function mousePressed(){
-  points.forEach(function(element){
-    let inputs = [element.x, element.y];
-    let target = element.label;
-    p.train(inputs, target);
-  });
+  // points.forEach(function(element){
+  //   let inputs = [element.x, element.y];
+  //   let target = element.label;
+  //   p.train(inputs, target);
+  // });
 }
