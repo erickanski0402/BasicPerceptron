@@ -12,7 +12,11 @@ class Perceptron{
     // Initialize the weights randomly
     this.weights = [];
     for(let i = 0; i < numWeights; i++){
-      this.weights[i] = random(-1, 1);
+      if(i < numWeights - 1){
+        this.weights[i] = random(-1, 1);
+      }else{
+        this.weights[i] = 1;
+      }
     }
 
     this.lr = learningRate;
@@ -38,6 +42,18 @@ class Perceptron{
     let output = this.sign(sum);
     //Run the sum through the activation function
     return output;
+  }
+
+  guessY(x){
+    // let m = this.weights[1] / this.weights[0];
+    // let b = this.weights[2];
+    // return m * x + b
+
+    let w0 = this.weights[0];
+    let w1 = this.weights[1];
+    let w2 = this.weights[2];
+
+    return -(w2 / w1) - (w0/w1) * x;
   }
 
   train(inputs, target){

@@ -6,7 +6,7 @@ let trainingIndex = 0;
 function setup(){
   createCanvas(600, 600)
 
-  p = new Perceptron(2, 0.1);
+  p = new Perceptron(3, 0.001);
   for(let i = 0; i < 100; i++){
     points[i] = new Point();
   }
@@ -17,13 +17,31 @@ function setup(){
 function draw(){
   background(255);
   stroke(0);
-  line(0, 0, width, height);
+  //line(0, height, width, 0 );
+  let realPoint1 = new Point();
+  realPoint1.setX(-1);
+  realPoint1.setY(realPoint1.f(-1));
+  let realPoint2 = new Point();
+  realPoint2.setX(1);
+  realPoint2.setY(realPoint2.f(1));
+  line(realPoint1.pixelX(), realPoint1.pixelY(), realPoint2.pixelX(), realPoint2.pixelY());
+
+
+  let guessPoint1 = new Point();
+  guessPoint1.setX(-1);
+  guessPoint1.setY(p.guessY(-1));
+  let guessPoint2 = new Point();
+  guessPoint2.setX(1);
+  guessPoint2.setY(p.guessY(1));
+  line(guessPoint1.pixelX(), guessPoint1.pixelY(), guessPoint2.pixelX(), guessPoint2.pixelY());
+
+
   points.forEach(function(element){
     element.show();
   });
 
   points.forEach(function(element){
-    let inputs = [element.x, element.y];
+    let inputs = [element.x, element.y, element.bias];
     let target = element.label;
     //p.train(inputs, target);
 
@@ -35,11 +53,11 @@ function draw(){
     }
 
     noStroke();
-    ellipse(element.x, element.y, 16, 16);
+    ellipse(element.pixelX(), element.pixelY(), 16, 16);
   });
 
   let training = points[trainingIndex];
-  let inputs = [training.x, training.y];
+  let inputs = [training.x, training.y, training.bias];
   let target = training.label;
   p.train(inputs, target);
   trainingIndex++;
