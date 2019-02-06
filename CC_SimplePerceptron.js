@@ -2,8 +2,8 @@ let p;
 let points = [];
 let learningRate = 0.005;
 //Learning rate initialized low for ease of understanding visuals
-let inputs = [random(-1, 1),random(-1,1), 1];
-//Perceptron initialized with random weights
+let inputs = [-1,0.5, 1];
+//Perceptron initialized
 let trainingIndex = 0;
 //Used to determine which point the line is being fitted for at each 'draw()'
 
