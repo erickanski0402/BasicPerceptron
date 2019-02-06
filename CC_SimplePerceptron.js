@@ -1,17 +1,24 @@
 let p;
 let points = [];
-let inputs = [-1, 0.5];
+let learningRate = 0.005;
+//Learning rate initialized low for ease of understanding visuals
+let inputs = [random(-1, 1),random(-1,1), 1];
+//Perceptron initialized with random weights
 let trainingIndex = 0;
+//Used to determine which point the line is being fitted for at each 'draw()'
 
 function setup(){
   createCanvas(600, 600)
+  //creates the canvas
 
-  p = new Perceptron(3, 0.001);
+  p = new Perceptron(inputs.length, learningRate);
+  //perceptron initialized to the number of inputs provided and learning rate
   for(let i = 0; i < 100; i++){
     points[i] = new Point();
+    //100 points are generated as random cartesian coordinates for training data
   }
-  let guess = p.guess(inputs);
-  console.log(guess)
+  // let guess = p.guess(inputs);
+  // console.log(guess)
 }
 
 function draw(){
@@ -25,6 +32,8 @@ function draw(){
   realPoint2.setX(1);
   realPoint2.setY(realPoint2.f(1));
   line(realPoint1.pixelX(), realPoint1.pixelY(), realPoint2.pixelX(), realPoint2.pixelY());
+  //Draws the actual line of best fit for the data
+  //    Found by finding what f(x) will be at x = -1 and again at x = 1
 
 
   let guessPoint1 = new Point();
@@ -34,26 +43,35 @@ function draw(){
   guessPoint2.setX(1);
   guessPoint2.setY(p.guessY(1));
   line(guessPoint1.pixelX(), guessPoint1.pixelY(), guessPoint2.pixelX(), guessPoint2.pixelY());
+  //Draws the perceptrons guessed line of best fit
+  //    Found by finding what the perceptron thinks f(x) should be at x = -1 and x = 1
 
 
   points.forEach(function(element){
     element.show();
+    //Draws each point in the list
   });
 
   points.forEach(function(element){
     let inputs = [element.x, element.y, element.bias];
+    //for each element in points, records the x, y, and bias
     let target = element.label;
+    //gets the label (+1 or -1) for each element in points
     //p.train(inputs, target);
 
     let guess = p.guess(inputs);
+    //Makes a guess based on the inputs recorded per element
     if(guess == target){
       fill(0, 255, 0);
+      //If the guess is correct then the circle is colored in green
     }else{
       fill(255, 0, 0);
+      //otherwise the guess is incorrect and is colored in red
     }
 
     noStroke();
     ellipse(element.pixelX(), element.pixelY(), 16, 16);
+    //Draws the circle depicting correctness or incorrectness
   });
 
   let training = points[trainingIndex];
@@ -61,14 +79,11 @@ function draw(){
   let target = training.label;
   p.train(inputs, target);
   trainingIndex++;
-
-  //How can I properly display the 'line' separating positive/negative examples?
-  // stroke(0);
-  line(0, (p.weights[0] * 0 + p.weights[1]), width, (p.weights[0] + p.weights[1] * height))
-  // console.log(p.weights[0] + "  " + p.weights[1]);
+  //Trains the perceptron with one point per iteration of 'draw()'
 
   if(trainingIndex == points.length){
     trainingIndex = 0;
+    //Once the last point has been reached, reset the training index to 0
   }
 }
 
