@@ -19,7 +19,12 @@ class Perceptron{
       }
     }
 
+    this.weights[2] = 1;
+    //this.weights.push(1);
+    //Bias is set
+
     this.lr = learningRate;
+    //learing rate is set
   }
 
   sign(n){
